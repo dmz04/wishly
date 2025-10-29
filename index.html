@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wishly | Explore Wishlists</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body class="bg-[#0f0b1b] text-white font-poppins">
+    <!-- Sidebar -->
+    <aside class="fixed top-0 left-0 h-full w-20 bg-[#1b1530]/70 backdrop-blur-xl flex flex-col items-center py-6 space-y-8 shadow-lg">
+      <h1 class="text-3xl font-bold text-purple-400">W</h1>
+      <nav class="flex flex-col gap-6 text-gray-400">
+        <a href="index.html" class="hover:text-purple-400">🏠</a>
+        <a href="dashboard.html" class="hover:text-purple-400">💜</a>
+        <a href="signup.html" class="hover:text-purple-400">👤</a>
+      </nav>
+    </aside>
+
+    <!-- Main -->
+    <main class="ml-24 p-10">
+      <header class="flex justify-between items-center mb-10">
+        <h2 class="text-4xl font-extrabold text-purple-400">🌟 Wishly</h2>
+        <a href="signup.html" class="bg-purple-600 hover:bg-purple-700 transition px-5 py-2 rounded-xl font-semibold shadow-md">Login</a>
+      </header>
+
+      <h3 class="text-2xl mb-6 font-bold">✨ Discover Others’ Wishlists</h3>
+      <section id="explore-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Les wishlists publiques s’affichent ici -->
+      </section>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>

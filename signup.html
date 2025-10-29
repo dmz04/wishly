@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wishly | Sign Up</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body class="bg-gradient-to-br from-[#1b1530] to-[#2e1d47] min-h-screen flex items-center justify-center text-white font-poppins">
+    <div class="bg-white/10 backdrop-blur-lg p-8 rounded-3xl w-80 shadow-2xl border border-white/10">
+      <h1 class="text-3xl font-extrabold text-center mb-2 text-purple-400">Wishly</h1>
+      <h2 class="text-lg text-center mb-6 text-gray-200">Create your account 💫</h2>
+
+      <form id="signup-form" class="flex flex-col space-y-4">
+        <input type="username" id="username" placeholder="Username" required class="p-3 rounded-xl text-black" />
+        <input type="password" id="password" placeholder="Password" required class="p-3 rounded-xl text-black" />
+        <button type="submit" class="bg-purple-600 hover:bg-purple-700 transition font-semibold py-2 rounded-xl">Sign Up / Login</button>
+      </form>
+
+      <p class="text-center text-sm mt-4 text-gray-300">
+        Already have an account? <a href="dashboard.html" class="underline text-purple-400">Go to dashboard</a>
+      </p>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
