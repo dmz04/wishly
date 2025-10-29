@@ -16,7 +16,10 @@ import {
   getDoc,
   collection,
   addDoc,
-  getDocs
+  getDocs,
+  deleteDoc,
+  query,
+  orderBy
 } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
 
 // --- CONFIGURATION FIREBASE ---
@@ -51,7 +54,7 @@ if (signupForm) {
     }
 
     try {
-      // 🔐 Connexion anonyme (pas d’email, pas de mot de passe)
+      // 🔐 Connexion anonyme (pas d’email)
       const userCred = await signInAnonymously(auth);
       const user = userCred.user;
 
@@ -74,10 +77,77 @@ if (signupForm) {
 // 💜 PAGE DASHBOARD (dashboard.html)
 // ==========================
 const logoutBtn = document.getElementById("logout");
-if (logoutBtn) {
-  logoutBtn.addEventListener("click", async () => {
-    await signOut(auth);
-    window.location.href = "signup.html";
+const newListForm = document.getElementById("new-list-form");
+const listNameInput = document.getElementById("list-name");
+const listsContainer = document.getElementById("lists-container");
+
+onAuthStateChanged(auth, async (user) => {
+  if (window.location.pathname.includes("dashboard.html")) {
+    if (!user) {
+      window.location.href = "signup.html";
+      return;
+    }
+
+    // 🔄 Afficher les wishlists existantes
+    loadUserWishlists(user.uid);
+
+    // 🆕 Création d'une nouvelle liste
+    if (newListForm) {
+      newListForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const listName = listNameInput.value.trim();
+        if (!listName) return alert("Entre un nom pour ta wishlist !");
+        try {
+          await addDoc(collection(db, "wishlists"), {
+            userId: user.uid,
+            name: listName,
+            createdAt: new Date(),
+          });
+          listNameInput.value = "";
+          loadUserWishlists(user.uid);
+        } catch (error) {
+          console.error("Erreur création wishlist :", error);
+        }
+      });
+    }
+
+    // 🚪 Déconnexion
+    if (logoutBtn) {
+      logoutBtn.addEventListener("click", async () => {
+        await signOut(auth);
+        window.location.href = "signup.html";
+      });
+    }
+  }
+});
+
+// 🧾 Charger les wishlists de l'utilisateur
+async function loadUserWishlists(userId) {
+  listsContainer.innerHTML = "<p class='text-gray-400'>Chargement...</p>";
+  const q = query(collection(db, "wishlists"), orderBy("createdAt", "desc"));
+  const querySnapshot = await getDocs(q);
+  listsContainer.innerHTML = "";
+  querySnapshot.forEach((docSnap) => {
+    const data = docSnap.data();
+    if (data.userId === userId) {
+      const card = document.createElement("div");
+      card.className =
+        "bg-white/10 backdrop-blur-lg rounded-2xl p-4 flex justify-between items-center";
+      card.innerHTML = `
+        <p class="font-semibold">${data.name}</p>
+        <button data-id="${docSnap.id}" class="delete-btn text-sm text-red-400 hover:text-red-500">🗑️</button>
+      `;
+      listsContainer.appendChild(card);
+    }
+  });
+
+  // ❌ Supprimer une wishlist
+  document.querySelectorAll(".delete-btn").forEach((btn) => {
+    btn.addEventListener("click", async () => {
+      const id = btn.getAttribute("data-id");
+      await deleteDoc(doc(db, "wishlists", id));
+      loadUserWishlists(userId);
+    });
   });
 }
 
@@ -85,8 +155,28 @@ if (logoutBtn) {
 // 🏠 PAGE INDEX (index.html)
 // ==========================
 const exploreContainer = document.getElementById("explore-container");
+
 if (exploreContainer) {
-  // 🔍 Affichera les wishlists plus tard (quand les users les créeront)
-  console.log("Page d'accueil chargée. Les wishlists apparaîtront ici bientôt !");
+  // 🔍 Charger toutes les wishlists publiques
+  loadPublicWishlists();
+}
+
+async function loadPublicWishlists() {
+  exploreContainer.innerHTML =
+    "<p class='text-gray-400'>Chargement des wishlists...</p>";
+  const q = query(collection(db, "wishlists"), orderBy("createdAt", "desc"));
+  const querySnapshot = await getDocs(q);
+  exploreContainer.innerHTML = "";
+  querySnapshot.forEach((docSnap) => {
+    const data = docSnap.data();
+    const card = document.createElement("div");
+    card.className =
+      "bg-white/10 backdrop-blur-lg rounded-2xl p-4 shadow-lg hover:scale-105 transition";
+    card.innerHTML = `
+      <p class="font-semibold mb-1">${data.name}</p>
+      <p class="text-sm text-gray-400">👤 ${data.userId.slice(0, 6)}...</p>
+    `;
+    exploreContainer.appendChild(card);
+  });
 }
 
