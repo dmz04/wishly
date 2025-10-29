@@ -1,4 +1,4 @@
-// ==========================
+// ========================== 
 // 🔥 INITIALISATION FIREBASE
 // ==========================
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
@@ -18,6 +18,8 @@ import {
   addDoc,
   getDocs,
   deleteDoc,
+  updateDoc,
+  arrayUnion,
   query,
   orderBy
 } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
@@ -54,11 +56,9 @@ if (signupForm) {
     }
 
     try {
-      // 🔐 Connexion anonyme (pas d’email)
       const userCred = await signInAnonymously(auth);
       const user = userCred.user;
 
-      // 💾 Enregistre le pseudo dans Firestore
       await setDoc(doc(db, "users", user.uid), {
         username: username,
         createdAt: new Date(),
@@ -101,6 +101,7 @@ onAuthStateChanged(auth, async (user) => {
           await addDoc(collection(db, "wishlists"), {
             userId: user.uid,
             name: listName,
+            items: [],
             createdAt: new Date(),
           });
           listNameInput.value = "";
@@ -127,15 +128,31 @@ async function loadUserWishlists(userId) {
   const q = query(collection(db, "wishlists"), orderBy("createdAt", "desc"));
   const querySnapshot = await getDocs(q);
   listsContainer.innerHTML = "";
+
   querySnapshot.forEach((docSnap) => {
     const data = docSnap.data();
     if (data.userId === userId) {
       const card = document.createElement("div");
       card.className =
-        "bg-white/10 backdrop-blur-lg rounded-2xl p-4 flex justify-between items-center";
+        "bg-white/10 backdrop-blur-lg rounded-2xl p-4 space-y-3 shadow-md";
       card.innerHTML = `
-        <p class="font-semibold">${data.name}</p>
-        <button data-id="${docSnap.id}" class="delete-btn text-sm text-red-400 hover:text-red-500">🗑️</button>
+        <div class="flex justify-between items-center">
+          <p class="font-semibold">${data.name}</p>
+          <button data-id="${docSnap.id}" class="delete-btn text-sm text-red-400 hover:text-red-500">🗑️</button>
+        </div>
+
+        <div class="items space-y-1 mt-3">
+          ${
+            data.items && data.items.length
+              ? data.items.map((item) => `<p class="text-gray-300">• ${item}</p>`).join("")
+              : `<p class="text-gray-500 italic">Aucun souhait encore 💭</p>`
+          }
+        </div>
+
+        <form data-id="${docSnap.id}" class="add-item-form flex gap-2 mt-3">
+          <input type="text" placeholder="Add item..." class="flex-grow rounded-lg p-2 text-black">
+          <button class="bg-purple-600 hover:bg-purple-700 px-3 rounded-lg text-sm">+</button>
+        </form>
       `;
       listsContainer.appendChild(card);
     }
@@ -149,6 +166,22 @@ async function loadUserWishlists(userId) {
       loadUserWishlists(userId);
     });
   });
+
+  // ➕ Ajouter un item dans une wishlist
+  document.querySelectorAll(".add-item-form").forEach((form) => {
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const id = form.getAttribute("data-id");
+      const input = form.querySelector("input");
+      const item = input.value.trim();
+      if (!item) return;
+      await updateDoc(doc(db, "wishlists", id), {
+        items: arrayUnion(item),
+      });
+      input.value = "";
+      loadUserWishlists(userId);
+    });
+  });
 }
 
 // ==========================
@@ -157,7 +190,6 @@ async function loadUserWishlists(userId) {
 const exploreContainer = document.getElementById("explore-container");
 
 if (exploreContainer) {
-  // 🔍 Charger toutes les wishlists publiques
   loadPublicWishlists();
 }
 
@@ -167,6 +199,7 @@ async function loadPublicWishlists() {
   const q = query(collection(db, "wishlists"), orderBy("createdAt", "desc"));
   const querySnapshot = await getDocs(q);
   exploreContainer.innerHTML = "";
+
   querySnapshot.forEach((docSnap) => {
     const data = docSnap.data();
     const card = document.createElement("div");
@@ -174,7 +207,11 @@ async function loadPublicWishlists() {
       "bg-white/10 backdrop-blur-lg rounded-2xl p-4 shadow-lg hover:scale-105 transition";
     card.innerHTML = `
       <p class="font-semibold mb-1">${data.name}</p>
-      <p class="text-sm text-gray-400">👤 ${data.userId.slice(0, 6)}...</p>
+      ${
+        data.items && data.items.length
+          ? data.items.map((item) => `<p class="text-gray-300 text-sm">• ${item}</p>`).join("")
+          : `<p class="text-gray-500 italic text-sm">No items yet 💭</p>`
+      }
     `;
     exploreContainer.appendChild(card);
   });
