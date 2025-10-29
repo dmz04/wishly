@@ -1,8 +1,11 @@
-// --- IMPORT FIREBASE MODULES ---
+// ==========================
+// 🔥 INITIALISATION FIREBASE
+// ==========================
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
 import {
   getAuth,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
+  signInAnonymously,
+  onAuthStateChanged,
   signOut
 } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
 
@@ -13,57 +16,63 @@ import {
   getDoc,
   collection,
   addDoc,
-  getDocs,
-  query,
-  orderBy
+  getDocs
 } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
 
-// --- GET FIREBASE INSTANCES FROM window ---
-const auth = window.app ? getAuth(window.app) : null;
-const db = window.app ? getFirestore(window.app) : null;
+// --- CONFIGURATION FIREBASE ---
+const firebaseConfig = {
+  apiKey: "AIzaSyBJ4g_rfs1aRtaIQLyr2Q6XCqw-fWnX4Fc",
+  authDomain: "wishly-69749.firebaseapp.com",
+  projectId: "wishly-69749",
+  storageBucket: "wishly-69749.firebasestorage.app",
+  messagingSenderId: "1050843898881",
+  appId: "1:1050843898881:web:571a227a8e199439058c00",
+  measurementId: "G-BL9W7H1VL2"
+};
 
-// --- SIGN UP / LOGIN ---
+// --- INITIALISATION ---
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+// ==========================
+// ✨ PAGE SIGNUP (signup.html)
+// ==========================
 const signupForm = document.getElementById("signup-form");
+
 if (signupForm) {
   signupForm.addEventListener("submit", async (e) => {
     e.preventDefault();
     const username = document.getElementById("username").value.trim();
-    const password = document.getElementById("password").value.trim();
 
-    if (!username || !password) {
-      alert("Please enter username and password");
+    if (!username) {
+      alert("Merci d’entrer un nom d’utilisateur !");
       return;
     }
 
     try {
-      const email = `${username}@wishly.app`; // hidden email, used only for Firebase
+      // 🔐 Connexion anonyme (pas d’email, pas de mot de passe)
+      const userCred = await signInAnonymously(auth);
+      const user = userCred.user;
 
-      // Try to sign in; if user not found, create new account
-      await signInWithEmailAndPassword(auth, email, password).catch(async (error) => {
-        if (error.code === "auth/user-not-found") {
-          await createUserWithEmailAndPassword(auth, email, password);
-
-          // Save username in Firestore
-          const userDocRef = doc(db, "users", username);
-          await setDoc(userDocRef, {
-            username: username,
-            createdAt: new Date().toISOString(),
-          });
-        } else {
-          throw error;
-        }
+      // 💾 Enregistre le pseudo dans Firestore
+      await setDoc(doc(db, "users", user.uid), {
+        username: username,
+        createdAt: new Date(),
       });
 
-      // Redirect to dashboard
+      alert("Bienvenue " + username + " !");
       window.location.href = "dashboard.html";
     } catch (error) {
+      alert("Erreur : " + error.message);
       console.error(error);
-      alert("Error: " + error.message);
     }
   });
 }
 
-// --- LOGOUT ---
+// ==========================
+// 💜 PAGE DASHBOARD (dashboard.html)
+// ==========================
 const logoutBtn = document.getElementById("logout");
 if (logoutBtn) {
   logoutBtn.addEventListener("click", async () => {
@@ -72,62 +81,12 @@ if (logoutBtn) {
   });
 }
 
-// --- CREATE NEW WISHLIST ---
-const newListForm = document.getElementById("new-list-form");
-if (newListForm) {
-  newListForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const listName = document.getElementById("list-name").value.trim();
-    if (!listName) return alert("Please enter a wishlist name.");
-
-    try {
-      const user = auth.currentUser;
-      if (!user) {
-        alert("Please login first.");
-        return;
-      }
-
-      // Get username from Firestore
-      const usernameKey = user.email.split("@")[0];
-      const userDoc = await getDoc(doc(db, "users", usernameKey));
-      const username = userDoc.exists() ? userDoc.data().username : "Unknown";
-
-      await addDoc(collection(db, "wishlists"), {
-        name: listName,
-        owner: username, // use username instead of email
-        createdAt: new Date().toISOString()
-      });
-
-      document.getElementById("list-name").value = "";
-      alert("Wishlist created!");
-      window.location.reload();
-    } catch (error) {
-      console.error(error);
-      alert("Error creating wishlist: " + error.message);
-    }
-  });
-}
-
-// --- DISPLAY ALL WISHLISTS ON INDEX PAGE ---
+// ==========================
+// 🏠 PAGE INDEX (index.html)
+// ==========================
 const exploreContainer = document.getElementById("explore-container");
 if (exploreContainer) {
-  const q = query(collection(db, "wishlists"), orderBy("createdAt", "desc"));
-  const snapshot = await getDocs(q);
-  exploreContainer.innerHTML = "";
-
-  if (snapshot.empty) {
-    exploreContainer.innerHTML =
-      `<p class="text-gray-400 italic w-full">No wishlists yet 💫</p>`;
-  } else {
-    snapshot.forEach((doc) => {
-      const data = doc.data();
-      exploreContainer.innerHTML += `
-        <div class="group bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6 transition-all hover:bg-white/10 hover:shadow-lg hover:shadow-purple-500/20">
-          <h4 class="text-lg font-semibold text-white/90 group-hover:text-purple-400 transition">${data.name}</h4>
-          <p class="text-sm text-gray-400 mt-2">by ${data.owner}</p>
-        </div>
-      `;
-    });
-  }
+  // 🔍 Affichera les wishlists plus tard (quand les users les créeront)
+  console.log("Page d'accueil chargée. Les wishlists apparaîtront ici bientôt !");
 }
 
