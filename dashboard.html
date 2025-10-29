@@ -37,7 +37,7 @@
           💜 <span class="bg-gradient-to-r from-pink-400 to-purple-500 bg-clip-text text-transparent">My Wishlists</span>
         </h3>
 
-        <!-- Form -->
+        <!-- Form to create a new wishlist -->
         <form id="new-list-form" class="flex flex-col sm:flex-row gap-3 mb-12">
           <input
             type="text"
@@ -53,41 +53,32 @@
         </form>
 
         <!-- Wishlists Container -->
-        <div id="lists-container" class="space-y-6 text-center">
-          <p class="text-gray-400 italic">You haven’t created any wishlists yet 💫</p>
+        <div id="lists-container" class="space-y-8 text-left">
+          <p class="text-gray-400 italic text-center">You haven’t created any wishlists yet 💫</p>
         </div>
       </section>
     </main>
 
-<!-- Firebase SDK (as provided by Firebase) -->
-<script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-analytics.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
+    <!-- Firebase SDK -->
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
+      import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-analytics.js";
+      const firebaseConfig = {
+        apiKey: "AIzaSyBJ4g_rfs1aRtaIQLyr2Q6XCqw-fWnX4Fc",
+        authDomain: "wishly-69749.firebaseapp.com",
+        projectId: "wishly-69749",
+        storageBucket: "wishly-69749.firebasestorage.app",
+        messagingSenderId: "1050843898881",
+        appId: "1:1050843898881:web:571a227a8e199439058c00",
+        measurementId: "G-BL9W7H1VL2"
+      };
+      const app = initializeApp(firebaseConfig);
+      const analytics = getAnalytics(app);
+      window.app = app;
+    </script>
 
-  // Your web app's Firebase configuration
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-  const firebaseConfig = {
-    apiKey: "AIzaSyBJ4g_rfs1aRtaIQLyr2Q6XCqw-fWnX4Fc",
-    authDomain: "wishly-69749.firebaseapp.com",
-    projectId: "wishly-69749",
-    storageBucket: "wishly-69749.firebasestorage.app",
-    messagingSenderId: "1050843898881",
-    appId: "1:1050843898881:web:571a227a8e199439058c00",
-    measurementId: "G-BL9W7H1VL2"
-  };
-
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-
-  // Make Firebase globally accessible
-  window.app = app;
-</script>
-
-<!-- Your existing JavaScript -->
-<script src="script.js" type="module"></script>
+    <!-- Script -->
+    <script src="script.js" type="module"></script>
   </body>
 </html>
+
