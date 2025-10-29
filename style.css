@@ -4,3 +4,25 @@ body {
   font-family: 'Poppins', sans-serif;
   scroll-behavior: smooth;
 }
+
+/* Smooth transitions globally */
+* {
+  transition: all 0.25s ease-in-out;
+}
+
+/* Custom glow on hover links */
+a:hover {
+  text-shadow: 0 0 8px rgba(168, 85, 247, 0.6);
+}
+
+/* Scrollbar refinement */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, #a855f7, #ec4899);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
