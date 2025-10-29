@@ -8,33 +8,66 @@
     <link rel="stylesheet" href="style.css" />
   </head>
 
-  <body class="bg-gradient-to-b from-[#0b0a12] via-[#120e22] to-[#1b1333] text-white font-poppins min-h-screen relative">
+  <body
+    class="bg-gradient-to-b from-[#0b0a12] via-[#120e22] to-[#1b1333] text-white font-poppins min-h-screen relative"
+  >
     <!-- Sidebar -->
-    <aside class="fixed top-0 left-0 h-full w-20 bg-white/5 backdrop-blur-2xl border-r border-white/10 flex flex-col items-center py-6 space-y-10 shadow-2xl">
-      <h1 class="text-4xl font-extrabold text-purple-400 tracking-wide drop-shadow-lg">W</h1>
+    <aside
+      class="fixed top-0 left-0 h-full w-20 bg-white/5 backdrop-blur-2xl border-r border-white/10 flex flex-col items-center py-6 space-y-10 shadow-2xl"
+    >
+      <h1
+        class="text-4xl font-extrabold text-purple-400 tracking-wide drop-shadow-lg"
+      >
+        W
+      </h1>
       <nav class="flex flex-col gap-8 text-gray-400 text-xl">
-        <a href="index.html" class="transition hover:text-purple-400 hover:scale-110">🏠</a>
-        <a href="dashboard.html" class="transition hover:text-purple-400 hover:scale-110">💜</a>
-        <a href="signup.html" class="transition hover:text-purple-400 hover:scale-110">👤</a>
+        <a
+          href="index.html"
+          class="transition hover:text-purple-400 hover:scale-110"
+          >🏠</a
+        >
+        <a
+          href="dashboard.html"
+          class="transition hover:text-purple-400 hover:scale-110"
+          >💜</a
+        >
+        <a
+          href="signup.html"
+          class="transition hover:text-purple-400 hover:scale-110"
+          >👤</a
+        >
       </nav>
     </aside>
 
     <!-- Main -->
     <main class="ml-24 px-10 py-12">
       <!-- Header -->
-      <header class="flex justify-between items-center mb-14 border-b border-white/10 pb-4">
-        <h2 class="text-5xl font-extrabold bg-gradient-to-r from-purple-400 via-pink-500 to-purple-600 bg-clip-text text-transparent drop-shadow-lg">
+      <header
+        class="flex justify-between items-center mb-14 border-b border-white/10 pb-4"
+      >
+        <h2
+          class="text-5xl font-extrabold bg-gradient-to-r from-purple-400 via-pink-500 to-purple-600 bg-clip-text text-transparent drop-shadow-lg"
+        >
           Wishly Dashboard
         </h2>
-        <button id="logout" class="bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-700 hover:to-pink-600 transition-all px-5 py-2.5 rounded-2xl font-semibold shadow-lg hover:shadow-purple-500/20">
+        <button
+          id="logout"
+          class="bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-700 hover:to-pink-600 transition-all px-5 py-2.5 rounded-2xl font-semibold shadow-lg hover:shadow-purple-500/20"
+        >
           Logout
         </button>
       </header>
 
       <!-- Section -->
       <section>
-        <h3 class="text-3xl font-semibold mb-8 text-gray-200 flex items-center gap-2">
-          💜 <span class="bg-gradient-to-r from-pink-400 to-purple-500 bg-clip-text text-transparent">My Wishlists</span>
+        <h3
+          class="text-3xl font-semibold mb-8 text-gray-200 flex items-center gap-2"
+        >
+          💜
+          <span
+            class="bg-gradient-to-r from-pink-400 to-purple-500 bg-clip-text text-transparent"
+            >My Wishlists</span
+          >
         </h3>
 
         <!-- Form to create a new wishlist -->
@@ -54,31 +87,14 @@
 
         <!-- Wishlists Container -->
         <div id="lists-container" class="space-y-8 text-left">
-          <p class="text-gray-400 italic text-center">You haven’t created any wishlists yet 💫</p>
+          <p class="text-gray-400 italic text-center">
+            You haven’t created any wishlists yet 💫
+          </p>
         </div>
       </section>
     </main>
 
-    <!-- Firebase SDK -->
-    <script type="module">
-      import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
-      import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-analytics.js";
-      const firebaseConfig = {
-        apiKey: "AIzaSyBJ4g_rfs1aRtaIQLyr2Q6XCqw-fWnX4Fc",
-        authDomain: "wishly-69749.firebaseapp.com",
-        projectId: "wishly-69749",
-        storageBucket: "wishly-69749.firebasestorage.app",
-        messagingSenderId: "1050843898881",
-        appId: "1:1050843898881:web:571a227a8e199439058c00",
-        measurementId: "G-BL9W7H1VL2"
-      };
-      const app = initializeApp(firebaseConfig);
-      const analytics = getAnalytics(app);
-      window.app = app;
-    </script>
-
-    <!-- Script -->
+    <!-- Script principal (Firebase + logique app) -->
     <script src="script.js" type="module"></script>
   </body>
 </html>
-
