@@ -8,33 +8,54 @@
     <link rel="stylesheet" href="style.css" />
   </head>
 
-  <body class="bg-[#0f0b1b] text-white font-poppins">
-    <aside class="fixed top-0 left-0 h-full w-20 bg-[#1b1530]/70 backdrop-blur-xl flex flex-col items-center py-6 space-y-8 shadow-lg">
-      <h1 class="text-3xl font-bold text-purple-400">W</h1>
-      <nav class="flex flex-col gap-6 text-gray-400">
-        <a href="index.html" class="hover:text-purple-400">🏠</a>
-        <a href="dashboard.html" class="hover:text-purple-400">💜</a>
-        <a href="signup.html" class="hover:text-purple-400">👤</a>
+  <body class="bg-gradient-to-b from-[#0b0a12] via-[#120e22] to-[#1b1333] text-white font-poppins min-h-screen relative">
+    <!-- Sidebar -->
+    <aside class="fixed top-0 left-0 h-full w-20 bg-white/5 backdrop-blur-2xl border-r border-white/10 flex flex-col items-center py-6 space-y-10 shadow-2xl">
+      <h1 class="text-4xl font-extrabold text-purple-400 tracking-wide drop-shadow-lg">W</h1>
+      <nav class="flex flex-col gap-8 text-gray-400 text-xl">
+        <a href="index.html" class="transition hover:text-purple-400 hover:scale-110">🏠</a>
+        <a href="dashboard.html" class="transition hover:text-purple-400 hover:scale-110">💜</a>
+        <a href="signup.html" class="transition hover:text-purple-400 hover:scale-110">👤</a>
       </nav>
     </aside>
 
-    <main class="ml-24 p-10">
-      <header class="flex justify-between items-center mb-10">
-        <h2 class="text-4xl font-extrabold text-purple-400">Wishly</h2>
-        <button id="logout" class="text-sm bg-purple-600 hover:bg-purple-700 px-4 py-2 rounded-xl">Logout</button>
+    <!-- Main -->
+    <main class="ml-24 px-10 py-12">
+      <!-- Header -->
+      <header class="flex justify-between items-center mb-14 border-b border-white/10 pb-4">
+        <h2 class="text-5xl font-extrabold bg-gradient-to-r from-purple-400 via-pink-500 to-purple-600 bg-clip-text text-transparent drop-shadow-lg">
+          Wishly Dashboard
+        </h2>
+        <button id="logout" class="bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-700 hover:to-pink-600 transition-all px-5 py-2.5 rounded-2xl font-semibold shadow-lg hover:shadow-purple-500/20">
+          Logout
+        </button>
       </header>
 
+      <!-- Section -->
       <section>
-        <h3 class="text-2xl font-bold mb-4">💜 My Wishlists</h3>
+        <h3 class="text-3xl font-semibold mb-8 text-gray-200 flex items-center gap-2">
+          💜 <span class="bg-gradient-to-r from-pink-400 to-purple-500 bg-clip-text text-transparent">My Wishlists</span>
+        </h3>
 
-        <!-- Formulaire création d'une nouvelle liste -->
-        <form id="new-list-form" class="flex gap-2 mb-8">
-          <input type="text" id="list-name" placeholder="New list name..." class="flex-grow p-3 rounded-xl text-black" />
-          <button class="bg-purple-600 hover:bg-purple-700 transition px-5 rounded-xl font-semibold">Create</button>
+        <!-- Form -->
+        <form id="new-list-form" class="flex flex-col sm:flex-row gap-3 mb-12">
+          <input
+            type="text"
+            id="list-name"
+            placeholder="Enter new wishlist name..."
+            class="flex-grow p-3 rounded-2xl text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500"
+          />
+          <button
+            class="bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-700 hover:to-pink-600 transition-all px-6 py-2.5 rounded-2xl font-semibold shadow-lg hover:shadow-purple-500/20"
+          >
+            Create
+          </button>
         </form>
 
-        <!-- Les listes -->
-        <div id="lists-container" class="space-y-6"></div>
+        <!-- Wishlists Container -->
+        <div id="lists-container" class="space-y-6 text-center">
+          <p class="text-gray-400 italic">You haven’t created any wishlists yet 💫</p>
+        </div>
       </section>
     </main>
 
